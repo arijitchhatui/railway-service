@@ -13,4 +13,12 @@ export const db = client.db("railway");
       unique: true,
     }
   );
+  db.collection(Collections.USER_PROFILES).createIndex(
+    {
+      userId: 1,
+    },
+    {
+      unique: true,
+    }
+  );
 })();

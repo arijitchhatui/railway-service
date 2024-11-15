@@ -8,7 +8,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       userId: string;
     };
   } catch (error) {
-    return res.status(401).json("Unauthorized");
+    return res.status(401).json({message: "Unauthorized"});
   }
   next();
 };
