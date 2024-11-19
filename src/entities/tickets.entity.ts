@@ -2,17 +2,17 @@ import { ObjectId } from "mongodb";
 
 export interface TicketEntity {
   userId: ObjectId;
-  noAdult: number;
-  noChild: number;
+  noAdult: string;
+  noChild: string;
   ticketType: string;
-  class: string;
+  des_class: string;
   trainType: string;
   bookingDate: Date;
   utsNo: string;
-  mobileNumber: number;
   via: string;
   sac: string |number;
   ir: string;
   bookingTime: Date;
-  charge: number;
+  sourceStation: string;
+  destinationStation: string
 }

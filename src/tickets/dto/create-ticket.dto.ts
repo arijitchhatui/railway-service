@@ -1,13 +1,10 @@
-export interface CreateTicketInput{
-  noAdult: number;
-  noChild: number;
+export interface CreateTicketInput {
+  noAdult: string;
+  noChild: string;
   ticketType: string;
-  class: string;
+  des_class: string;
   trainType: string;
-  utsNo: string;
-  mobileNumber: number;
   via: string;
-  sac: number;
-  ir: string;
-  charge: number;
+  sourceStation: string;
+  destinationStation: string;
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { TicketEntity } from "../entities/ticket.entity";
+import { TicketEntity } from "../entities/tickets.entity";
 import { db } from "../rdb/mongodb";
 import { Collections } from "../util/constants";
 import { CreateTicketInput } from "./dto/create-ticket.dto";
@@ -33,25 +33,25 @@ export const getTicket = async (req: Request, res: Response) => {
 export const createTicket = async (req: Request, res: Response) => {
   const userId = new ObjectId(req.user!.userId);
   const body = req.body as CreateTicketInput;
+  const utsNo =  getIr(15);
   const sac =  getSac(10);
   const ir =  getIr(15);
-  const utsNo =  getIr(15);
 
   await tickets.insertOne({
-    userId,
-    noAdult: body.noAdult,
-    noChild: body.noChild,
-    ticketType: body.ticketType,
-    class: body.class,
-    trainType: body.trainType,
-    bookingDate: new Date(),
-    utsNo,
-    mobileNumber: body.mobileNumber,
-    via: body.via,
-    sac,
     ir,
+    sac,
+    utsNo,
+    userId,
+    via: body.via,
+    noChild: body.noChild,
+    noAdult: body.noAdult,
     bookingTime: new Date(),
-    charge: body.charge,
+    bookingDate: new Date(),
+    des_class: body.des_class,
+    trainType: body.trainType,
+    ticketType: body.ticketType,
+    sourceStation:body.sourceStation,
+    destinationStation:body.destinationStation
   });
 
   return res.status(200).json({ message: "OK" });
