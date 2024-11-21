@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export interface TicketEntity {
+export interface TicketsEntity {
   userId: ObjectId;
   noAdult: string;
   noChild: string;

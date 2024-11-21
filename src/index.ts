@@ -6,7 +6,7 @@ import express from "express";
 import morgan from "morgan";
 
 import loginRouter from "./auth/auth.controller";
-import ticketRouter from "./tickets/tickets.controller";
+import ticketsRouter from "./tickets/tickets.controller";
 import usersRouter from "./users/users.controller"
 
 
@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
 
-app.use(loginRouter, ticketRouter, usersRouter);
+app.use(loginRouter, ticketsRouter, usersRouter);
 
 
 const port = process.env.PORT;
