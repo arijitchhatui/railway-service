@@ -13,8 +13,8 @@ router.get("/tickets", auth, getTickets);
 
 router.post("/tickets/create", auth, createTicket);
 
-router.get("/tickets/:postId", auth, getSingleTicket);
-
 router.get("/tickets/timeline", auth, getTimeline);
+
+router.get("/tickets/:ticketId", auth, getSingleTicket);
 
 export default router;

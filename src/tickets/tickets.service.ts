@@ -33,6 +33,9 @@ export const getTickets = async (req: Request, res: Response) => {
 export const createTicket = async (req: Request, res: Response) => {
   const userId = new ObjectId(req.user!.userId);
   const body = req.body as CreateTicketInput;
+  const bookingTime = new Date();
+  const bookingDate = new Date(bookingTime);
+  bookingDate.setDate(bookingDate.getDate() + 1);
   const utsNo = getIr(15);
   const sac = getSac(10);
   const ir = getIr(15);
@@ -45,8 +48,8 @@ export const createTicket = async (req: Request, res: Response) => {
     via: body.via,
     noChild: body.noChild,
     noAdult: body.noAdult,
-    bookingTime: new Date(),
-    bookingDate: new Date(),
+    bookingTime: bookingTime,
+    bookingDate: bookingDate,
     des_class: body.des_class,
     trainType: body.trainType,
     ticketType: body.ticketType,
@@ -59,7 +62,7 @@ export const createTicket = async (req: Request, res: Response) => {
 
 export const getSingleTicket = async (req: Request, res: Response) => {
   const ticketId = new ObjectId(req.params.ticketId);
-  const result = await tickets
+  const [result] = await tickets
     .aggregate([
       {
         $match: { _id: ticketId },

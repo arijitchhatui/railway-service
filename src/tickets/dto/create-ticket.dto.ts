@@ -1,6 +1,6 @@
 export interface CreateTicketInput {
-  noAdult: string;
-  noChild: string;
+  noAdult: number;
+  noChild: number;
   ticketType: string;
   des_class: string;
   trainType: string;
