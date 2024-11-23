@@ -34,8 +34,7 @@ export const createTicket = async (req: Request, res: Response) => {
   const userId = new ObjectId(req.user!.userId);
   const body = req.body as CreateTicketInput;
   const bookingTime = new Date();
-  const bookingDate = new Date(bookingTime);
-  bookingDate.setDate(bookingDate.getDate() + 1);
+  const bookingDate = new Date(bookingTime.getTime() + 24 * 60 * 60 * 1000);
   const utsNo = getIr(15);
   const sac = getSac(10);
   const ir = getIr(15);
