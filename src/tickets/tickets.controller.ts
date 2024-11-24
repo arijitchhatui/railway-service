@@ -2,6 +2,7 @@ import { Router } from "express";
 import { auth } from "../auth/middleware";
 import {
   createTicket,
+  deleteTicket,
   getSingleTicket,
   getTickets,
   getTimeline,
@@ -16,5 +17,8 @@ router.post("/tickets/create", auth, createTicket);
 router.get("/tickets/timeline", auth, getTimeline);
 
 router.get("/tickets/:ticketId", auth, getSingleTicket);
+
+router.delete("/tickets/:id/delete", auth, deleteTicket);
+
 
 export default router;

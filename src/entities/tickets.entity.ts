@@ -10,9 +10,9 @@ export interface TicketsEntity {
   bookingDate: Date;
   utsNo: string;
   via: string;
-  sac: string ;
+  sac: string;
   ir: string;
   bookingTime: Date;
-  sourceStation: string;
+  sourceStation: string
   destinationStation: string
 }

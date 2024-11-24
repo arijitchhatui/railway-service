@@ -7,6 +7,27 @@ import { CreateTicketInput } from "./dto/create-ticket.dto";
 
 const tickets = db.collection<TicketsEntity>(Collections.TICKET);
 
+const handleTranslate = async (text: string, language: string) => {
+  const accessToken = process.env.GOOGLE_TRANSLATION_API_KEY;
+  const url = process.env.GOOGLE_TRANSLATION_URL;
+  const res = await fetch(
+    `${url}?q=${encodeURIComponent(
+      text
+    )}&target=${language}&key=${accessToken}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error.message);
+  }
+  return data.data.translations[0].translatedText;
+};
+
 function getSac(length: 10): string {
   const characters = "1QAZ2WSX3EDC4RFV5TGB6YHN7UJM8IK9OLP0";
   let result = "";
@@ -16,6 +37,14 @@ function getSac(length: 10): string {
   return result;
 }
 function getIr(length: 15): string {
+  const characters = "1QAZ2WSX3EDC4RFV5TGB6YHN7UJM8IK9OLP0";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+function getUtsNo(length: 9): string {
   const characters = "1QAZ2WSX3EDC4RFV5TGB6YHN7UJM8IK9OLP0";
   let result = "";
   for (let i = 0; i < length; i++) {
@@ -35,7 +64,7 @@ export const createTicket = async (req: Request, res: Response) => {
   const body = req.body as CreateTicketInput;
   const bookingTime = new Date();
   const bookingDate = new Date(bookingTime.getTime() + 24 * 60 * 60 * 1000);
-  const utsNo = getIr(15);
+  const utsNo = getUtsNo(9);
   const sac = getSac(10);
   const ir = getIr(15);
 
@@ -79,7 +108,41 @@ export const getSingleTicket = async (req: Request, res: Response) => {
       },
     ])
     .toArray();
-  return res.json(result);
+
+  const ticket = await tickets.findOne({ _id: ticketId });
+  if (!ticket) {
+    return res.json({ message: "There is no such ticket!" });
+  }
+  return res.status(200).json(result)
+
+  // const sourceStationHindi = await handleTranslate(result.sourceStation, "hi");
+  // const sourceStationBengali = await handleTranslate(
+  //   result.sourceStation,
+  //   "bn"
+  // );
+  // const destinationStationHindi = await handleTranslate(
+  //   result.destinationStation,
+  //   "hi"
+  // );
+  // const destinationStationBengali = await handleTranslate(
+  //   result.destinationStation,
+  //   "bn"
+  // );
+
+  // const response = {
+  //   ...result,
+  //   sourceStation: {
+  //     original: result.sourceStation,
+  //     hindi: sourceStationHindi,
+  //     bengali: sourceStationBengali,
+  //   },
+  //   destinationStation: {
+  //     original: result.destinationStation,
+  //     hindi: destinationStationHindi,
+  //     bengali: destinationStationBengali,
+  //   },
+  // };
+  // return res.json(response);
 };
 
 export const getTimeline = async (req: Request, res: Response) => {
@@ -96,7 +159,20 @@ export const getTimeline = async (req: Request, res: Response) => {
       {
         $unwind: "$user",
       },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
     ])
     .toArray();
   return res.json(result);
+};
+
+export const deleteTicket = async (req: Request, res: Response) => {
+  const ticketId = new ObjectId(req.params.id);
+  const userId = new ObjectId(req.user!.userId);
+  await tickets.deleteOne({ userId, _id: ticketId });
+
+  return res.status(200).json({ message: "Deleted" });
 };
