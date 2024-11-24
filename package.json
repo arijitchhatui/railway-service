@@ -1,4 +1,10 @@
 {
+  "name": "Instagram",
+  "version": "1.0.0",
+  "description": "My personal Instagram",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "private": "true",
   "scripts": {
     "build": "tsc",
     "dev": "npx nodemon src/index.ts --watch",
